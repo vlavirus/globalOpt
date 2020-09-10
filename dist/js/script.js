@@ -1,51 +1,58 @@
 
-let position = 0;
+
 const slidesToShow = 3;
 const slideToScroll = 1;
 const container = document.querySelector('.reviews-slider');
 const track = document.querySelector('.reviews-slider__track');
-const items = document.querySelectorAll('.reviews-slider__slide')
+const items = document.querySelectorAll('.reviews-slider__slide');
+const itemsLayers = document.querySelectorAll('.layer');
 const btnPrev = document.querySelector('.reviews-buttons__prev');
 const btnNext = document.querySelector('.reviews-buttons__next');
 const itemsCount = items.length;
-const itemWidth = container.clientWidth / slidesToShow;
+const itemWidth = track.clientWidth;
 const movePosition = slideToScroll * itemWidth;
-let currentItem = 1;
-position = 0;
+let currentItem = 2;
+let position = -itemWidth;
+track.style.transform = `translateX(${position}px)`;
+
+itemsLayers[currentItem-1].style.display = `none`;
+items[currentItem-1].classList.toggle('uncative');
 
 items.forEach((item) => {
-	item.style.minWidth = `${itemWidth}px`
-})
-
-btnNext.addEventListener('click',() => {
-	position -= itemWidth;
-	items[currentItem].classList.toggle('small');
-	currentItem += 1;
-	items[currentItem].classList.toggle('small');
-	setPosition();
-	checkBtns();
+	item.style.minWidth = `${itemWidth - 40}px`
 })
 
 btnPrev.addEventListener('click', () => {
 	position += itemWidth;
-	items[currentItem].classList.toggle('small');
+	itemsLayers[currentItem-1].style.display = `block`;
+	items[currentItem-1].classList.toggle('uncative');
 	currentItem -= 1;
-	items[currentItem].classList.toggle('small');
+	itemsLayers[currentItem-1].style.display = `none`;
+	items[currentItem-1].classList.toggle('uncative');
 	setPosition();
 	checkBtns();
 })
 
+btnNext.addEventListener('click', () => {
+	position -= itemWidth;
+	itemsLayers[currentItem-1].style.display = `block`;
+	items[currentItem-1].classList.toggle('uncative');
+	currentItem += 1;
+	itemsLayers[currentItem-1].style.display = `none`;
+	items[currentItem-1].classList.toggle('uncative');
+	setPosition();
+	checkBtns();
+})
 
 const setPosition = () => {
 	track.style.transform = `translateX(${position}px)`;
 }
 
 const checkBtns = () => {
-	btnPrev.disabled = position === itemWidth;
-	btnNext.disabled = position === -itemWidth;
+	btnPrev.disabled = currentItem === 1;
+	btnNext.disabled = currentItem === itemsCount;
 	console.log(`position ${position}, ${-itemWidth}` )
 }
-checkBtns();
 
 // GOOGLE MAPS
 
@@ -98,10 +105,8 @@ const modals = document.getElementsByName('modal'),
 	  modal = document.querySelector('#request'),
 	  thanx = document.querySelector('#thanx'),
 	  close = document.querySelectorAll('.modal__close'),
-	  accept = document.getElementsByName('accept'),
+	  accept = document.getElementById('accept'),
 	  modalMini = document.querySelector('.modal_mini');
-
-	  console.log(thanx)
 
 		modals.forEach(button => {
 			button.addEventListener('click', function() {
